@@ -1,11 +1,12 @@
 import csv 
 
+f = "" # You put your csv file's path or name 
 
 class Admin():
     
     def search(self, item):
          Items = []
-         with open("items.csv", "r") as file:
+         with open(f, "r") as file:
              reader = csv.DictReader(file)
              for row in reader:
                  if row['item_name'] == item: 
@@ -21,14 +22,14 @@ class Admin():
             return [Items, 0]
              
     def add(self, item, price):
-        with open("items.csv", "r") as file:
+        with open(f, "r") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['item_name'] == item: 
                     return False
                 else:
                     pass
-        with open("items.csv", "a", newline='') as file:
+        with open(f, "a", newline='') as file:
             writer = csv.DictWriter(file, fieldnames=["item_name", "item_price"])
             writer.writerow({"item_name": item.rstrip(), "item_price": price.rstrip()}) 
 
@@ -37,7 +38,7 @@ class Customer():
     def search(self, item):
 
         Items = []
-        with open("items.csv", "r") as file:
+        with open(f, "r") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['item_name'] == item: 
