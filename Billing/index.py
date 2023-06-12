@@ -2,11 +2,10 @@ import csv
 from tabulate import tabulate
 import sys
 from termcolor import colored
+from setup import setup
 
-
-file_name = "items.csv" # File name/File path
-
-
+file_name = "" # File name/File path
+file_name = setup(file_name)
 
 class Admin():
     
