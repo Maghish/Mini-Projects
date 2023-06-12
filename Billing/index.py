@@ -4,7 +4,7 @@ import sys
 from termcolor import colored
 
 
-file_name = "" # File name/File path
+file_name = "items.csv" # File name/File path
 
 
 
@@ -151,42 +151,54 @@ def admin():
 
 
 def customer():
-    Items = {}
+    S = []
     while True:
         item = input("Item: ")
         if item.lower() == "exit":
             exit("Shutdowning.... ")
         if item.lower() == "back":
             break
+
+
         if item.lower() == "done":
-            print(Items)   
-        customer_item = Customer()
-        result = customer_item.search(item)
+            data = [["Items", "Price"]]
+            for thing in S:
+                data.append([thing['item'], thing['price']])
+            print(f"\n\n{tabulate(data, headers= 'firstrow')}")
+            amount = 0
+            for s in S:
+                amount += int(s['price'])
+            print(f"----------------\nTotal: ${amount}")
+            exit("\n\nThank you! Visit Again!\n")
 
-        if result == False:
-            print("No Results found")
-            pass
         else:
-            if result[1] == 0:
-                i = 0
-                for items in result[0]:
-                    print(f"{i + 1}. {items}")
-                    i += 1
-                print(f"\n{i} results found")
-            elif result[1] == 1:
-                print(f"Price: ${result[0]}")
-                ask = input("Add to cart? Y/N ")
-                if ask.lower() == "y":
-                    print(f"{item} added to cart")
-                    Items["item"] = item
-                    Items["price"] = result[0]
-
-                    print(f"Till now total: ${Items}")
-                elif ask.lower() == "n":
-                    pass
-                else:
-                    print("Invalid Input")
-                    pass 
+            customer_item = Customer()
+            result = customer_item.search(item)
+            if result == False:
+                print("No Results found")
+                pass
+            else:
+                if result[1] == 0:
+                    i = 0
+                    for items in result[0]:
+                        print(f"{i + 1}. {items}")
+                        i += 1
+                    print(f"\n{i} results found")
+                elif result[1] == 1:
+                    print(f"Price: ${result[0]}")
+                    ask = input("Add to cart? Y/N ")
+                    if ask.lower() == "y":
+                        S.append({"item": item, "price": result[0]})
+                        print(f"{item} added to cart")
+                        amount = 0
+                        for s in S:
+                            amount += int(s['price'])
+                        print(f"Till now total: ${amount}")
+                    elif ask.lower() == "n":
+                        pass
+                    else:
+                        print("Invalid Input")
+                        pass 
 
 
 def variables(n):
