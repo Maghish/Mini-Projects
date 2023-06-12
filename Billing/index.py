@@ -1,12 +1,18 @@
 import csv 
+from tabulate import tabulate
+import sys
+from termcolor import colored
 
-f = "" # You put your csv file's path or name 
+
+file_name = "" # File name/File path
+
+
 
 class Admin():
     
     def search(self, item):
          Items = []
-         with open(f, "r") as file:
+         with open(file_name, "r") as file:
              reader = csv.DictReader(file)
              for row in reader:
                  if row['item_name'] == item: 
@@ -16,20 +22,27 @@ class Admin():
                       Items.append(row['item_name'])
                  else:
                      pass
-         if len(Items) == 0:
+         if len(Items) == 0:  
             return False
          else:
             return [Items, 0]
              
     def add(self, item, price):
-        with open(f, "r") as file:
+
+        try:
+            test_price = price.replace("$", "")
+            test_price = int(test_price)
+        except:
+            return [False, 1]
+        with open(file_name, "r") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['item_name'] == item: 
-                    return False
+                    return [False, 2]
                 else:
                     pass
-        with open(f, "a", newline='') as file:
+        
+        with open(file_name, "a", newline='') as file:
             writer = csv.DictWriter(file, fieldnames=["item_name", "item_price"])
             writer.writerow({"item_name": item.rstrip(), "item_price": price.rstrip()}) 
 
@@ -38,7 +51,7 @@ class Customer():
     def search(self, item):
 
         Items = []
-        with open(f, "r") as file:
+        with open(file_name, "r") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['item_name'] == item: 
@@ -58,12 +71,9 @@ class Customer():
 
       
 def main():
+    check_arg()
     while True:
-        mode = input('''\n\nModes:
-1. Admin
-2. Customer
-3. Exit 
-Select a option above: ''')
+        mode = input(variables(1))
         
         if mode == '1' or mode.lower() == "admin":
             admin()
@@ -80,19 +90,14 @@ Select a option above: ''')
 
 def admin():
     while True:
-            operation = input('''\n\nActions:
-1. Add items 
-2. Search  
-3. Back
-4. Exit
-Select a option above: ''')
+            operation = input(variables(2))
             if operation == '1' or operation.lower() == "add items":
                 while True:
-                    result = input("Type as (Item_name, Item_price): ")
+                    result = input("Item: ")
                     if result.lower() == "back":
                         break
                     if result.lower() == "exit":
-                        exit()
+                        exit("Shutdowning....")
                     try:
                         name, price = result.split(",")
                         admin_item = Admin()
@@ -100,8 +105,15 @@ Select a option above: ''')
                             price = price.strip()
                         else:
                             price = f"${price.strip()}"
-                        admin_item.add(name, price)
-
+                        y = admin_item.add(name, price)
+                        if y == None:
+                            print("Added ✅")
+                            continue
+                        elif y[0] == False and y[1] == 2:
+                            print("Item already exists")
+                            continue
+                        elif y[0] == False and y[1] == 1:
+                            print("Invaild input")
                     except: 
                         print("Try again!")
                         pass
@@ -121,9 +133,9 @@ Select a option above: ''')
                     elif result[1] == 0:
                         i = 0
                         for items in result[0]:
-                            print(f"{i + 1}.{items}")
+                            print(f"{i + 1}. {items}")
                             i += 1
-                        print(f"{i} results found")
+                        print(f"\n{i} results found")
                     elif result[1] == 1:
                         print(f"Item: {item_name}\nPrice: ${result[0]}")    
             
@@ -139,7 +151,7 @@ Select a option above: ''')
 
 
 def customer():
-    Items = 0
+    Items = {}
     while True:
         item = input("Item: ")
         if item.lower() == "exit":
@@ -147,10 +159,7 @@ def customer():
         if item.lower() == "back":
             break
         if item.lower() == "done":
-            if Items == 0:
-                exit("No items added\nThank You! Visit again!")
-            else:
-                exit(f"Total: ${Items}\nThank You! Visit again!")    
+            print(Items)   
         customer_item = Customer()
         result = customer_item.search(item)
 
@@ -161,22 +170,57 @@ def customer():
             if result[1] == 0:
                 i = 0
                 for items in result[0]:
-                    print(f"{i + 1}.{items}")
+                    print(f"{i + 1}. {items}")
                     i += 1
-                print(f"{i} results found")
+                print(f"\n{i} results found")
             elif result[1] == 1:
                 print(f"Price: ${result[0]}")
                 ask = input("Add to cart? Y/N ")
                 if ask.lower() == "y":
                     print(f"{item} added to cart")
-                    Items += int(result[0])
-                    print(f"${Items}")
+                    Items["item"] = item
+                    Items["price"] = result[0]
+
+                    print(f"Till now total: ${Items}")
                 elif ask.lower() == "n":
                     pass
                 else:
                     print("Invalid Input")
                     pass 
-            
+
+
+def variables(n):
+    if n == 1:
+        var = [['', "Modes"],
+               [1, "Admin"],
+               [2, "Customer"],
+               [3, "Exit"]]
+        var = f"\n{tabulate(var, headers='firstrow', tablefmt='fancy_grid')}\nSelect a option above: "
+        return var
+    elif n == 2:
+        var = [['', 'Actons'],
+               [1, 'Add items'],
+               [2, 'Search'],
+               [3, 'Back'],
+               [4, 'Exit']]
+        var = f"\n{tabulate(var, headers='firstrow', tablefmt='fancy_grid')}\nSelect a option above: "
+        return var     
+    
+def check_arg():
+    if len(sys.argv) > 1:
+        if sys.argv[1].lower() == "-admin" or sys.argv[1].lower() == "-a":
+            admin()
+        elif sys.argv[1].lower() == "customer" or sys.argv[1].lower() == "-c":
+            customer()
+        elif sys.argv[1].lower() == "-kw":
+            print(f"\n{colored('Special Keywords:', 'cyan')} {colored('back', 'yellow')}, {colored('exit', 'red')}, {colored('done' , 'green')}{colored('(customer only)', 'black')}\n")
+            exit()
+        else:
+            print("\nAvailable commands: -a, -c, -kw\n")
+            exit()
+        return
+    else:
+        return
 
         
 if __name__ == "__main__":
