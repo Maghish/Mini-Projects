@@ -36,12 +36,12 @@ Select a option above:
 #### `Add items | 1`:
 this action will let you to add your items of your choice and you would likely to be prompted as:
 ```md
-Type as (Item_name, Item_price): 
+Item:  
 ```
 In this you can type the items as `<Item_name>, <Item_price>`.   
 example: 
 ```md
-Type as (Item_name, Item_price): Ketchup, $20
+Item: Ketchup, $20
 ```
 Note that `,` is important in the input. With that the item will be added and the program will reprompt you again. If you are done adding the items you desired, then type the keyword `back` to get back to action menu or if you want to exit the program then type the keyword `exit` to exit the program.
 #
