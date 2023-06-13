@@ -1,8 +1,17 @@
 # The Pythonic Billing System
 #### Video Demo:  <URL HERE>
 ## Description: 
-This is a simple billing system which is designed by Python language. You can add items, search items in `Admin` mode and in `Customers` mode, you can search for available products and if you gave the exact name of the product, it will ask you to whether add it to the cart of yours. At last you can type the keyword "**`done`**" to end the search and return you the total price of the products in the cart.
-### Tutorial:
+This is a simple billing system which is designed by Python language. You can add items, search items in `Admin` mode and in `Customers` mode, you can search for available products and if you gave the exact name of the product, it will ask you to whether add it to the cart of yours. At last you can type the keyword "**`done`**" to end the search and return you the total price of the products in the cart. **IMPORTANT NOTE:** It is a necessary to add `setup.py` to with the `index.py` file since the `setup.py` will make a clean csv file for the program to work with, and it is not recommended to create a csv file by yourself. So just do the following to setup the project:
+
+1.  `setup.py` must be in the same directory of `index.py` 
+2.  in the `index.py` you will find this line commented in the code and in that there will be a variable called **file_name** with empty double quotes, and in that type in any file that you want it to stored in and if the file is not created yet, don't worry that's what the `setup.py` is for. It will create or edit a csv file satisfy the requirements of the `index.py`.
+```python
+file_name = "" # File name/File path
+file_name = setup(file_name)
+``` 
+3. If you done all the steps above, then you are good to go! Check out the Tutorial or the video demo for more information on how to use this program.
+ 
+# Tutorial:
  ```md
 Modes:
 1. Admin
@@ -72,7 +81,49 @@ This let's you get back to the actions menu again.
 This will straight up exit the program.
 #
 # Customer
-Under development!
+This straight away asks you a item to search for:
+```md
+Item:  
+```
+You can use the keyword `all` to find all the items available. Let's say you added _Ketchup_ for $40 and you are in customer mode and want to find the ketchup. You can just type:
+```md
+Item: all
+```
+then it will prompt the items which starts with "K" or what input you gave:
+```md
+Item: K
+1. Kakarot Noodles
+2. Ketchup  
+```
+then if you type the exact name of the product then it will prompt you to add to the cart:
+```md
+Item: Ketchup
+Price: $40
+Add to cart? Y/N
+```
+if you type "N" then it will reprompt again, but if you responded with "Y" then it will add the product to the cart and prompt the total price of the products in the cart so far:
+```md
+Item: Ketchup
+Price: $40
+Add to cart? Y/N y
+Till now total: $40
+Item: 
+```
+after shopping all the stuff you need, you can simply type in **`done`** to end the loop and bill all the stuff you have in your cart and return you the total amount of money you have to pay them.
+```md
+Item: done
 
 
+Items    Price
+------- -------
+Ketchup  $40
+------- -------
+Total: $40
 
+
+Thank you! Visit Again!
+```
+and That was the project! If you want to know about the keywords of the projects then type this in the command line to get the list of keywords:
+```txt
+$ python index.py -kw
+```
