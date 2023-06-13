@@ -4,27 +4,39 @@ import sys
 from termcolor import colored
 from setup import setup
 
+
+
+
+
 file_name = "" # File name/File path
 file_name = setup(file_name)
 
 class Admin():
     
     def search(self, item):
-         Items = []
-         with open(file_name, "r") as file:
-             reader = csv.DictReader(file)
-             for row in reader:
-                 if row['item_name'] == item: 
-                      price = row['item_price'].replace("$", "")
-                      return [price, 1] 
-                 elif row['item_name'].startswith(item) or item in row['item_name']: 
-                      Items.append(row['item_name'])
-                 else:
-                     pass
-         if len(Items) == 0:  
-            return False
-         else:
-            return [Items, 0]
+        if item.lower() == "all":
+            all = []
+            with open(file_name, 'r') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    all.append(row["item_name"])
+            return [all, 2]
+        else:     
+            Items = []
+            with open(file_name, "r") as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    if row['item_name'] == item: 
+                        price = row['item_price'].replace("$", "")
+                        return [price, 1] 
+                    elif row['item_name'].startswith(item) or item in row['item_name']: 
+                        Items.append(row['item_name'])
+                    else:
+                        pass
+            if len(Items) == 0:  
+                return False
+            else:
+                return [Items, 0]
              
     def add(self, item, price):
 
@@ -48,22 +60,29 @@ class Admin():
 class Customer():
 
     def search(self, item):
-
-        Items = []
-        with open(file_name, "r") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                if row['item_name'] == item: 
-                    price = row['item_price'].replace("$", "")
-                    return [price, 1] 
-                elif row['item_name'].startswith(item) or item in row['item_name']:
-                    Items.append(row['item_name'])
-                else:
-                    pass
-        if len(Items) == 0:
-            return False
+        if item.lower() == "all":
+            all = []
+            with open(file_name, 'r') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    all.append(row["item_name"])
+            return [all, 2]
         else:
-            return [Items, 0]
+            Items = []
+            with open(file_name, "r") as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    if row['item_name'] == item: 
+                        price = row['item_price'].replace("$", "")
+                        return [price, 1] 
+                    elif row['item_name'].startswith(item) or item in row['item_name']:
+                        Items.append(row['item_name'])
+                    else:
+                        pass
+            if len(Items) == 0:
+                return False
+            else:
+                return [Items, 0]
 
 
 
@@ -137,7 +156,17 @@ def admin():
                         print(f"\n{i} results found")
                     elif result[1] == 1:
                         print(f"Item: {item_name}\nPrice: ${result[0]}")    
-            
+                    elif result[1] == 2:
+                        if len(result[0]) < 1:
+                            print("No Results found")
+                            continue
+                        else:
+                            i = 0
+                            for thing in result[0]:
+                                print(f"{i + 1}. {thing}")
+                                i += 1
+                            print(f"\n{i} results found")    
+             
             elif operation == '3' or operation.lower() == "back":
                 break
 
@@ -162,13 +191,13 @@ def customer():
         if item.lower() == "done":
             data = [["Items", "Price"]]
             for thing in S:
-                data.append([thing['item'], thing['price']])
+                data.append([thing['item'], f"${int(thing['price'])}"])
             print(f"\n\n{tabulate(data, headers= 'firstrow')}")
             amount = 0
             for s in S:
                 amount += int(s['price'])
             print(f"----------------\nTotal: ${amount}")
-            exit("\n\nThank you! Visit Again!\n")
+            exit("\n\nThank you! Visit Again!\n\n")
 
         else:
             customer_item = Customer()
@@ -198,6 +227,16 @@ def customer():
                     else:
                         print("Invalid Input")
                         pass 
+                elif result[1] == 2:
+                    if len(result[0]) < 1:
+                        print("No Results found")
+                        continue
+                    else:
+                        i = 0
+                        for thing in result[0]:
+                            print(f"{i + 1}. {thing}")
+                            i += 1
+                        print(f"\n{i} results found")        
 
 
 def variables(n):
