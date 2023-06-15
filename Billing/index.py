@@ -6,9 +6,7 @@ from setup import setup
 
 
 
-
-
-file_name = "" # File name/File path
+file_name = "items.csv" # File name/File path
 file_name = setup(file_name)
 
 class Admin():
@@ -263,7 +261,7 @@ def check_arg():
         elif sys.argv[1].lower() == "customer" or sys.argv[1].lower() == "-c":
             customer()
         elif sys.argv[1].lower() == "-kw":
-            print(f"\n{colored('Special Keywords:', 'cyan')} {colored('back', 'yellow')}, {colored('exit', 'red')}, {colored('done' , 'green')}{colored('(customer only)', 'black')}\n")
+            print(f"\n{colored('Special Keywords:', 'cyan')} {colored('back', 'yellow')}, {colored('exit', 'red')}, {colored('done' , 'green')}{colored('(customer only)', 'black')}, {colored('all', 'blue')}{colored('(in search only)', 'black')}\n")
             exit()
         else:
             print("\nAvailable commands: -a, -c, -kw\n")
