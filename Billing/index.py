@@ -264,7 +264,7 @@ def variables(n):
         var = f"\n{tabulate(var, headers='firstrow', tablefmt='fancy_grid')}\nSelect a option above: "
         return var
     elif n == 2:
-        var = [['', 'Actons'],
+        var = [['', 'Actions'],
                [1, 'Add items'],
                [2, 'Search'],
                [3, 'Back'],
