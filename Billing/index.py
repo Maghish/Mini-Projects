@@ -9,6 +9,7 @@ from setup import setup
 file_name = "" # File name/File path
 file_name = setup(file_name)
 
+
 class Admin():
     
     def search(self, item):
@@ -131,7 +132,7 @@ def admin():
                         elif y[0] == False and y[1] == 1:
                             print("Invaild input")
                     except: 
-                        print("Try again!")
+                        print("Seems you missed comma ','")
                         pass
                 
             elif operation == '2' or operation.lower() == "search":
@@ -141,7 +142,7 @@ def admin():
                         exit("Shutdowning.... ")
                     if item_name.lower() == "back":
                         break
-                    admin_item = Admin()
+                    admin_item = Admin() 
                     result = admin_item.search(item_name)
                     if result == False:
                         print("No Results found")
@@ -187,14 +188,31 @@ def customer():
 
 
         if item.lower() == "done":
-            data = [["Items", "Price"]]
-            for thing in S:
-                data.append([thing['item'], f"${int(thing['price'])}"])
-            print(f"\n\n{tabulate(data, headers= 'firstrow')}")
+            data = []
+            t = 0
+            for thing in S:    
+                    t = 0
+                    for key in data:
+                        if key['name'] == thing['item']:
+                            key['amount'] += 1
+                            t = 1
+                            break
+                        else:
+                            pass    
+                    if t == 0:
+                        data.append({"name": thing['item'] , "value" : thing['price'], "amount": 1},)
+                        continue
+                    else:
+                        pass
+            final_data = [["Item", "Price", "Qty"]] 
+            for thing in data:
+                final_data.append([thing['name'], thing['value'], thing['amount']])     
+                continue        
+            print(f"\n\n{tabulate(final_data, headers= 'firstrow')}")
             amount = 0
             for s in S:
                 amount += int(s['price'])
-            print(f"----------------\nTotal: ${amount}")
+            print(f"----------------------------\nTotal: ${amount}")
             exit("\n\nThank you! Visit Again!\n\n")
 
         else:
