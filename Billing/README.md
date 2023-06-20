@@ -4,8 +4,7 @@
 This is a simple billing system which is designed by Python language. You can add items, search items in `Admin` mode and in `Customers` mode, you can search for available products and if you gave the exact name of the product, it will ask you to whether add it to the cart of yours. At last you can type the keyword "**`done`**" to end the search and return you the total price of the products in the cart. **IMPORTANT NOTE:** This program will prompt you for **creating keys** _/_ **access keys** _/_ **exit**. You can create keys, access keys or exit the program. 
 Now:
 ## What is keys?
-Keys are more like "keys" used to access separate files, like you want to store stuff like dairy products in `dairy.csv` then you can create a key and name whatever you want (But you have to remember the key name!)
-Example:
+Keys are more like "keys" used to access separate files, like you want to store stuff like dairy products in `dairy.csv` then you can create a key and name whatever you want.
 
 ```md
 ╒════╤════════════╕
@@ -64,16 +63,7 @@ Select a option above: 1
 Key name: Dairy
 Successfully connected with dairy.csv ✅
 ```
-
-```json
-{
- "Dairy": {
-  "PATH": "dairy.csv"
- }
-}
-```
-as you can see, "Dairy" is the key and "dairy.csv" is the path.
-You can create many keys as you desire. 
+You can create many keys as you desire. But each key can only contain one file.
  
 # Tutorial:
  ```md
