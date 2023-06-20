@@ -1,11 +1,12 @@
+"""
+The Pythonic Billing System
+"""
+
 import csv
 from tabulate import tabulate
 import sys
 from termcolor import colored
 import json
-
-
-
 
 
 
@@ -122,6 +123,15 @@ class Keys():
             path = users[key]["PATH"]
 
             return path
+        
+        def get_all_keys(self):
+            users = self.get_data()
+            keys = []
+            with open("users.json", "r") as f:
+                users = json.load(f)
+            for key in users:
+                keys.append(key)
+            return keys
 
 
 
@@ -151,7 +161,7 @@ def main():
                         else:
                             user.create_keys(key, path)
                             file_name = path
-                            file_name = setup(file_name)
+                            file_name = setup_csv(file_name)
                             print(f"Successfully created {file_name} ✅")
                             while True:
                                 mode = input(variables(1))
@@ -170,35 +180,45 @@ def main():
 
             elif interface == '2' or interface.lower() == 'sign in':
                 user = Keys()
-                key = input("Key name: ")
-                if key == 'exit':
-                    exit("Shutdowning....")
-                elif key == 'back':
-                    pass
+                all_keys = user.get_all_keys()
+                i = 0
+                for keys in all_keys:
+                    i += 1
+                    print(f"{i}. {keys}")
+                if i == 0:
+                    print("There are no keys! Create a new key!")
+                    continue
                 else:
-                    check = user.check_keys(key)
-                    if check == True:
-                        path = user.get_path(key)
-                        file_name = path
-                        file_name = setup(file_name)
-                        print(f"Successfully connected with {file_name} ✅")
-                        while True:
-                            mode = input(variables(1))
-
-                            if mode == '1' or mode.lower() == "admin":
-                                admin(file_name)
-                            elif mode == '2' or mode.lower() == "customer":
-                                customer(file_name)
-                            elif mode == '3' or mode.lower() == "back":
-                                break
-                            elif mode == '4' or mode.lower() == "exit":
-                                exit("Shutdowning.... ")
-                            else:
-                                print("Invalid option")
-                                pass
-
+                    print(f"\n{i} keys found")
+                    key = input("Key name: ")
+                    if key == 'exit':
+                        exit("Shutdowning....")
+                    elif key == 'back':
+                        pass
                     else:
-                        print(f"There is no key called {key}, try signing up")
+                        check = user.check_keys(key)
+                        if check == True:
+                            path = user.get_path(key)
+                            file_name = path
+                            file_name = setup_csv(file_name)
+                            print(f"Successfully connected with {file_name} ✅")
+                            while True:
+                                mode = input(variables(1))
+
+                                if mode == '1' or mode.lower() == "admin":
+                                    admin(file_name)
+                                elif mode == '2' or mode.lower() == "customer":
+                                    customer(file_name)
+                                elif mode == '3' or mode.lower() == "back":
+                                    break
+                                elif mode == '4' or mode.lower() == "exit":
+                                    exit("Shutdowning.... ")
+                                else:
+                                    print("Invalid option")
+                                    pass
+
+                        else:
+                            print(f"There is no key called {key}, try creating a key")
 
             elif interface == '3' or interface.lower() == 'exit':
                 exit("Shutdowning....")
@@ -405,7 +425,7 @@ def check_arg(*args, **kwargs):
         return False
 
 
-def setup(path):
+def setup_csv(path):
     try:
         with open(path, 'r') as f:
             return path

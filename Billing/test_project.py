@@ -1,5 +1,6 @@
-from project import variables, setup_json, check_arg, Keys, Admin, Customer
+from project import variables, setup_json, check_arg, Keys, Admin, Customer, setup_csv
 from tabulate import tabulate
+import os
 
 
 
@@ -14,6 +15,7 @@ def test_vars():
     assert str(var) == str(var2)
 
 def test_setup_json():
+    assert setup_json() == False
     assert setup_json() == True
 
 def test_args():
@@ -22,8 +24,13 @@ def test_args():
 def test_users():
     keys = Keys()
     assert keys.check_keys("Default") == False
-    assert keys.create_keys("Default", "item.csv") == True 
+    assert keys.create_keys("Default", "items.csv") == True 
     assert keys.check_keys("Default") == True
+
+def test_setup_csv():
+    assert setup_csv("items.csv") == "items.csv"  
+    assert setup_csv("items.csv") == "items.csv"
+    assert setup_csv("more_items.csv") == "more_items.csv"      
 
 
 def test_admin():
@@ -34,5 +41,9 @@ def test_admin():
 def test_customer():
     customer = Customer("items.csv")
     assert customer.search("all") ==  [["Bottle"] , 2]
+    os.remove("items.csv")
+    os.remove("more_items.csv")
+    os.remove("users.json")
+
     
 

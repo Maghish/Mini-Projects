@@ -60,10 +60,10 @@ Select a option above: 2
 │  3 │ Exit       │
 ╘════╧════════════╛
 Select a option above: 1
+
 Key name: Dairy
 Successfully connected with dairy.csv ✅
 ```
-In case you forgot the key name, then you have to manually find `users.json` and open the file:
 
 ```json
 {
